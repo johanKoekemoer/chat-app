@@ -1,4 +1,4 @@
-# chat-app
+# Fireplace
 A real-time messaging application
 
 Project requirements:
