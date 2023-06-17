@@ -37,3 +37,10 @@ Project requirements:
   --- Boostrap - https://react-bootstrap.github.io/
  -- Repository - https://github.com/
  -- Project Management - https://todoist.com/
+
+
+
+ USEFELL RECOURCES:
+
+ --For adding Firebase Authentication:
+ https://blog.logrocket.com/user-authentication-firebase-react-apps/
