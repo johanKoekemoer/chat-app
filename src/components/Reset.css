@@ -11,6 +11,8 @@
     text-align: center;
     background-color: #dcdcdc;
     padding: 30px;
+    color: black;
+    border-radius: 3%;
   }
   .reset__textBox {
     padding: 10px;

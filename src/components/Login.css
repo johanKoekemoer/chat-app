@@ -1,3 +1,9 @@
+body {
+  background-color: #333333; 
+  color: #ffffff00;
+  font-family: Arial, sans-serif;
+}
+
 .login {
     height: 100vh;
     width: 100vw;
@@ -10,7 +16,9 @@
     flex-direction: column;
     text-align: center;
     background-color: #dcdcdc;
+    color: black;
     padding: 30px;
+    border-radius: 4%;
   }
   .login__textBox {
     padding: 10px;
