@@ -1,24 +1,29 @@
+// Import the necessary react hooks, navigation functions, styling and Firebase funtions
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, signInWithEmailAndPassword, signInWithGoogle } from "./firebase";
+import { auth, logInWithEmailAndPassword, signInWithGoogle } from '../Firebase'
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 
+//Login functional component
 function Login() {
+
+  //Declare State variables:
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+
+  // useAuthState hook is used to declare user and loading state from Firebase
+  const [user, loading] = useAuthState(auth);
+
+  // useNavigate hook is used to declare navigate function for navigation
   const navigate = useNavigate();
 
+  //
   useEffect(() => {
-    if (loading) {
-      // dev TODO: insert a loading screen
-      return;
-    }
     if (user) navigate("/dashboard");
   }, [user, loading]);
-  
-  // JSX Structure
+
+  //JSX structure of Login page
   return (
     <div className="login">
       <div className="login__container">
@@ -38,7 +43,7 @@ function Login() {
         />
         <button
           className="login__btn"
-          onClick={() => signInWithEmailAndPassword(email, password)}
+          onClick={() => logInWithEmailAndPassword(email, password)}
         >
           Login
         </button>
