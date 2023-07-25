@@ -1,10 +1,10 @@
 // Import routing elements and components
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
-import Reset from "./Components/Reset";
-import Dashboard from "./Components/Dashboard";
-import Profile from "./Components/Profile";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Reset from "./components/Reset";
+import Dashboard from "./components/Dashboard";
+import Profile from "./components/Profile";
 
 //Main App Component
 function App() {
