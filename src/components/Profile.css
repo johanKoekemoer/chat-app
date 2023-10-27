@@ -55,6 +55,7 @@ body {
   
   .logout-div {
     display: flex;
+    flex-direction: column;
     justify-content:center;
     align-items: center;
     margin-top: 35px;
@@ -108,5 +109,9 @@ body {
 
   button:hover {
     background-color: #777777;
+  }
+  
+  .chatpage__btn {
+    margin-bottom: 10px;
   }
   

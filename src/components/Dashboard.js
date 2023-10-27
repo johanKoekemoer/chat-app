@@ -5,7 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { auth, db, logout } from "../Firebase"
-import { query, collection, where, getDocs } from "firebase/firestore/lite";
+import { query, collection, where, getDocs } from "firebase/firestore";
 
 
 // Dashboard functional component 

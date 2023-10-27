@@ -9,7 +9,7 @@ import {
   sendPasswordResetEmail, 
   signOut 
 } from "firebase/auth";
-import { getFirestore, query, getDocs, collection, where, addDoc } from "firebase/firestore/lite";
+import { getFirestore, query, getDocs, collection, where, addDoc, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -46,7 +46,8 @@ const signInWithGoogle = async () => {
 
     // If the user is new, add their information to the Firestore database
     if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
+
+      const newUser = {
         uid: user.uid,
         name: user.displayName,
         nickname: user.displayName,
@@ -54,7 +55,18 @@ const signInWithGoogle = async () => {
         authProvider: "google",
         email: user.email,
         profilePhotoUrl: user.photoURL
-      });
+      };
+
+      /*await addDoc(collection(db, "users"), newUser);
+      */
+     //firebase.firestore().collection("colName").doc("docID").set({...})
+
+      if (user) {
+      const docRef = collection(db, "users");
+      await setDoc(doc(docRef, user.uid), newUser);
+    };
+      
+
     }
     // If error occurs then, catch error and display the error message
     } catch (err) {
@@ -140,4 +152,5 @@ const signInWithGoogle = async () => {
     sendPasswordReset, 
     logout, 
     storage,
+    app,
   };

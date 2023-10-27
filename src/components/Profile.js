@@ -3,7 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import { auth, db, logout, storage } from "../Firebase"
-import { query, collection, where, getDocs, updateDoc, doc, addDoc} from "firebase/firestore/lite";
+import { query, collection, where, getDocs, updateDoc, doc, addDoc} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
@@ -65,10 +65,14 @@ const navigate = useNavigate();
   const submitProfilePicture = async() => {
     setEditingPic(false);
     setVisibility("hidden-input")
-    const downloadURL = await getDownloadURL(ref(storage, `profilePictures/${user.uid}`));
-    await updateDoc(doc(db, "users", id), { profilePhotoUrl: downloadURL });
+  
+
     const storageRef = ref(storage, `profilePictures/${user.uid}`);
     await uploadBytes(storageRef, profilePicture);
+
+    const downloadURL = await getDownloadURL(ref(storage, `profilePictures/${user.uid}`));
+    await updateDoc(doc(db, "users", id), { profilePhotoUrl: downloadURL });
+
     await fetchUserData();
   };
   ///////////
@@ -125,6 +129,10 @@ const navigate = useNavigate();
   const logOut = () => {
     logout();
     navigate("/")
+  };
+
+  const chatPage = () => {
+    navigate("/chat")
   };
 
 
@@ -189,7 +197,11 @@ const navigate = useNavigate();
         </div>
 
         <div className="logout-div">
-          <button onClick={logOut}>Logout</button>
+          
+          <button className="chatpage__btn" onClick={chatPage}>
+          Continue to Chat
+        </button>
+        <button onClick={logOut}>Logout</button>
         </div>
       </div>
     </div>
