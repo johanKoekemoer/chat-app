@@ -3,13 +3,18 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.login__logo {
+  border-radius: 3%;
+  margin-top: 8px;
+  margin-bottom: 15px;
+}
+
 .login {
-  background-color: #001aff4f;
   height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
   background-image: url('https://media4.giphy.com/media/3o72FhIuVWddxQHftS/giphy.gif?cid=ecf05e474w321nz1piuz2ud2v06i3wxx3gyq26wuo2br159f&ep=v1_gifs_search&rid=giphy.gif&ct=g'); /* Specify the path to your fireplace GIF */
   background-size: cover;
   background-repeat: no-repeat;
@@ -20,7 +25,7 @@ body {
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color: rgba(220, 220, 220, 0.7); /* Adjust opacity and background color */
+  background-color: rgba(53, 53, 53, 0.918); /* Adjust opacity and background color */
   color: black;
   padding: 30px;
   border-radius: 4%;

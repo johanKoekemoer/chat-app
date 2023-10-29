@@ -9,8 +9,9 @@ import {
   sendPasswordResetEmail, 
   signOut 
 } from "firebase/auth";
-import { getFirestore, query, getDocs, collection, where, addDoc, doc, setDoc } from "firebase/firestore";
+import { getFirestore, getDoc, collection, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -32,43 +33,34 @@ const storage = getStorage(app);
 // Google Authentication
 const googleProvider = new GoogleAuthProvider();
 
-// Sign in with Google account
-// This function uses Firebase's signInWithPopup method to authenticate the user with Google
-// If the user is new, it adds their information to the Firestore database
+// Sign in or Register with Google account:
 const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
     const user = res.user;
 
     // Check if the user already exists in the Firestore database
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    const docs = await getDocs(q);
+    if (user) {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
 
-    // If the user is new, add their information to the Firestore database
-    if (docs.docs.length === 0) {
+      // If the user is new, add their information to the Firestore database
+      if (!userDocSnapshot.exists()) {
 
       const newUser = {
         uid: user.uid,
         name: user.displayName,
-        nickname: user.displayName,
-        bio: "",
-        authProvider: "google",
+        displayName: user.displayName.split(" ")[0],
+        bio:  "Hey there! I am using Fireplace.",
+        authProvider: "Google",
         email: user.email,
-        profilePhotoUrl: user.photoURL
+        profilePhotoUrl: user.photoURL,
+        online: true,
       };
-
-      /*await addDoc(collection(db, "users"), newUser);
-      */
-     //firebase.firestore().collection("colName").doc("docID").set({...})
-
-      if (user) {
       const docRef = collection(db, "users");
       await setDoc(doc(docRef, user.uid), newUser);
-    };
-      
+    }};
 
-    }
-    // If error occurs then, catch error and display the error message
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -91,29 +83,25 @@ const signInWithGoogle = async () => {
     try {
 
       // If user provides profile picture then the picture will be uploaded to Firebase storage
-      //if (profilePicture) {
+
          //Upload profile picture to storage
-       // const storageRef = ref(storage, `profilePictures/${user.uid}`);
-        //await uploadBytes(storageRef, profilePicture);
   
         // Get the download URL of the uploaded image
-        //const downloadURL = await getDownloadURL(storageRef);
-        //await addDoc(collection(db, "users"), {
-        //  profilePhotoUrl: downloadURL,});
-      //}
 
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
       const storageRef = ref(storage, `profilePictures/${user.uid}`);
       await uploadBytes(storageRef, profilePicture);
       const downloadURL = await getDownloadURL(storageRef);
-      await addDoc(collection(db, "users"), {
+      const docRef = collection(db, "users");
+      await setDoc(doc(docRef, user.uid), {
         uid: user.uid,
         name,
-        nickname: name,
-        bio: "",
-        authProvider: "local",
+        displayName: name.split(" ")[0],
+        bio: "Hey there! I am using Fireplace",
+        authProvider: "Local",
         email,
+        online: false,
         profilePhotoUrl: downloadURL,
       });
       

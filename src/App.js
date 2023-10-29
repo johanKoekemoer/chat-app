@@ -7,55 +7,55 @@ import Reset from "./components/Reset";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Chat from "./components/Chat";
-import { auth, db } from "./Firebase"
+import { auth, db } from "./Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs, updateDoc, doc } from "@firebase/firestore";
+import { updateDoc, doc, getDoc } from "@firebase/firestore";
 
-//Main App Component
+// Main App Component
 function App() {
+  // ONLINE/OFFLINE Detection functionality
+  const [user, loading] = useAuthState(auth);
+  const [userId, setUserId] = useState("")
 
-  const [user, loading] = useAuthState(auth)
-  const [id, setId] = useState("")
   const setUserOnline = async (id) => {
-    if (id != "") {
+    if (id) {
       const userDocRef = doc(db, "users", id);
-      await updateDoc(userDocRef, { status: true });
+      await updateDoc(userDocRef, { online: true });
     }
   };
 
   const setUserOffline = async (id) => {
-    if (id != "") {
+    if (id) {
       const userDocRef = doc(db, "users", id);
-      await updateDoc(userDocRef, { status: false });
+      await updateDoc(userDocRef, { online: false });
     }
   };
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault(); // Prevent the default dialog from showing
-      setUserOffline(id); // Update the user's status to "false" when leaving
+      setUserOffline(user?.uid); // Update the user's online status to "false" when leaving
     };
-
+  
     // Attach the beforeunload event listener
     window.addEventListener("beforeunload", handleBeforeUnload);
-
+  
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is authenticated, now you can access user.uid
-        setId(user.uid);
-        setUserOnline(id); // Update the user's status to "true" when they log in
+        setUserId(user.uid);
+        setUserOnline(userId); // Pass the user's UID when setting online
       } else {
-        setUserOffline(id); // Update the user's status to "false" when they log out
+        // User is logged out, update online status to "false"
+        setUserOffline(userId); // Pass the user's UID when setting offline
       }
     });
-
+  
     return () => {
       // Remove the beforeunload event listener when the component unmounts
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [id, user, loading]);
-
+  }, [user, loading]);
 
   return (
     <div className="app">
@@ -72,4 +72,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
