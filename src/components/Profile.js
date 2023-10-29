@@ -16,12 +16,12 @@ function Profile() {
   const [user] = useAuthState(auth);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [nick, setNick] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [id, setId] = useState(null);
   const [imgUrl, setImgUrl] = useState("");
   const [editingName, setEditingName] = useState(false);
-  const [editingNick, setEditingNick] = useState(false);
+  const [editingDisplayName, setEditingDisplayName] = useState(false);
   const [editingBio, setEditingBio] = useState(false);
   const [editingPic, setEditingPic] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -36,7 +36,7 @@ const navigate = useNavigate();
       const data = doc.docs[0].data(); // Extract the data from the first document
       setEmail(data.email); 
       setName(data.name); 
-      setNick(data.nickname)
+      setDisplayName(data.displayName)
       setBio(data.bio);
       setId(doc.docs[0].id);
       setImgUrl(data.profilePhotoUrl);
@@ -93,19 +93,19 @@ const navigate = useNavigate();
   };
   ////////////
 
-    /////////// EDIT NICK BLOCK
-    const editNick = () => {
-      setEditingNick(!editingNick);
+    /////////// EDIT DisplayName BLOCK
+    const editDisplayName = () => {
+      setEditingDisplayName(!editingDisplayName);
     };
-    const handleNickChange = (event) => {
-      setNick(event.target.value);
+    const handleDisplayNameChange = (event) => {
+      setDisplayName(event.target.value);
     };
-    const uploadNick = async () => {
-      await updateDoc(doc(db, "users", id), { nickname: nick });
+    const uploadDisplayName = async () => {
+      await updateDoc(doc(db, "users", id), { displayName: displayName });
     };
-    const finishNickEdit = () => {
-      setEditingNick(!editingNick);
-      uploadNick();
+    const finishDisplayNameEdit = () => {
+      setEditingDisplayName(!editingDisplayName);
+      uploadDisplayName();
     };
     ////////////
     
@@ -139,7 +139,7 @@ const navigate = useNavigate();
   return (
     <div className="profile">
       <div className="profile-heading">
-        <h3>{nick}'s Profile</h3>
+        <h3>{displayName}'s Profile</h3>
       </div>
 
       <div className="inner-container">
@@ -148,7 +148,7 @@ const navigate = useNavigate();
           <label htmlFor="file-input">
             {editingPic ?
               null :
-              (<img className="img" src={imgUrl} alt={nick + "'s Profile Photo"}/>)}
+              (<img className="img" src={imgUrl} alt={displayName + "'s Profile Photo"}/>)}
           </label>
           {editingPic ?
            (<div className="apply-pic-div"><button onClick={submitProfilePicture}>Update Avatar<CheckIcon/></button></div>) :
@@ -172,16 +172,16 @@ const navigate = useNavigate();
 
         <div className="nick-div">
           <p>
-            {editingNick ?
-              (<input value={nick} onChange={handleNickChange} />) :
-              (<p>Nickname: <strong className="user-data">{nick}</strong></p>)}
+            {editingDisplayName ?
+              (<input value={displayName} onChange={handleDisplayNameChange} />) :
+              (<p>Display name: <strong className="user-data">{displayName}</strong></p>)}
           </p>
-          {!editingNick ? (
-            <button onClick={editNick} className="edit-icon">
+          {!editingDisplayName ? (
+            <button onClick={editDisplayName} className="edit-icon">
               <EditIcon />
             </button>
           ) : (
-            <button onClick={finishNickEdit}><CheckIcon/></button>
+            <button onClick={finishDisplayNameEdit}><CheckIcon/></button>
           )}
         </div>
 
