@@ -1,0 +1,39 @@
+/* Input container */
+.input__container {
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+
+}
+
+.input_box {
+  flex: 1;
+  width: calc(100% - 60px); /* Adjust the width as needed */
+  max-height: 120px; /* Adjust the maximum height for 6 lines */
+  height: 25px; /* Adjust the initial height */
+  padding: 5px;
+  font-size: 16px;
+  margin: 4px;
+  color: black;
+  resize: none; /* Disable resizing */
+  overflow-y: auto; /* Allow scrolling when content exceeds max-height */
+  white-space: wrap; /* Prevent text from wrapping initially */
+  transition: height 0.3s ease; /* Add smooth transition for height changes */
+}
+
+.input_box:focus {
+  height: 80px; /* Adjust the expanded height as needed */
+}
+
+.btn-container {
+  padding-top: 2px;
+}
+
+.send-btn {
+  background-color: #eb8500;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

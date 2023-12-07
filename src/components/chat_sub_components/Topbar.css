@@ -1,0 +1,18 @@
+.chat-picture {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+}
+
+.chat-title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.chat-name, .chat-picture  {
+margin-top: -8px;
+margin-bottom: -8px;
+margin-left: 5px;
+margin-right: 5px;
+}

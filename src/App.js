@@ -29,6 +29,7 @@ function App() {
     if (id) {
       const userDocRef = doc(db, "users", id);
       await updateDoc(userDocRef, { online: false });
+      setUserId("");
     }
   };
 
@@ -37,10 +38,10 @@ function App() {
       e.preventDefault(); // Prevent the default dialog from showing
       setUserOffline(user?.uid); // Update the user's online status to "false" when leaving
     };
-  
+
     // Attach the beforeunload event listener
     window.addEventListener("beforeunload", handleBeforeUnload);
-  
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserId(user.uid);
@@ -50,7 +51,7 @@ function App() {
         setUserOffline(userId); // Pass the user's UID when setting offline
       }
     });
-  
+
     return () => {
       // Remove the beforeunload event listener when the component unmounts
       window.removeEventListener("beforeunload", handleBeforeUnload);

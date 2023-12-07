@@ -1,19 +1,19 @@
 // Import required functions from the Firebase modules
 import { initializeApp } from "firebase/app";
-import { 
-  GoogleAuthProvider, 
-  getAuth, 
-  signInWithPopup, 
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword, 
-  sendPasswordResetEmail, 
-  signOut 
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut
 } from "firebase/auth";
 import { getFirestore, getDoc, collection, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyB7Fv8CNI49N16PaY6T3F9ji30ABtA3xPU",
   authDomain: "fireplace-7d903.firebaseapp.com",
@@ -47,98 +47,99 @@ const signInWithGoogle = async () => {
       // If the user is new, add their information to the Firestore database
       if (!userDocSnapshot.exists()) {
 
-      const newUser = {
-        uid: user.uid,
-        name: user.displayName,
-        displayName: user.displayName.split(" ")[0],
-        bio:  "Hey there! I am using Fireplace.",
-        authProvider: "Google",
-        email: user.email,
-        profilePhotoUrl: user.photoURL,
-        online: true,
-      };
-      const docRef = collection(db, "users");
-      await setDoc(doc(docRef, user.uid), newUser);
-    }};
+        const newUser = {
+          uid: user.uid,
+          name: user.displayName,
+          displayName: user.displayName.split(" ")[0],
+          bio: "Hey there! I am using Fireplace.",
+          authProvider: "Google",
+          email: user.email,
+          profilePhotoUrl: user.photoURL,
+          online: true,
+        };
+        const docRef = collection(db, "users");
+        await setDoc(doc(docRef, user.uid), newUser);
+      }
+    };
 
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
 
-  // Email and password Authentication: Log in
-  const logInWithEmailAndPassword = async (email, password) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+// Email and password Authentication: Log in
+const logInWithEmailAndPassword = async (email, password) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
 
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
 
-  // Email and password Authentication: Register
-  const registerWithEmailAndPassword = async (name, email, password, profilePicture) => {
-    try {
+// Email and password Authentication: Register
+const registerWithEmailAndPassword = async (name, email, password, profilePicture) => {
+  try {
 
-      // If user provides profile picture then the picture will be uploaded to Firebase storage
+    // If user provides profile picture then the picture will be uploaded to Firebase storage
 
-         //Upload profile picture to storage
-  
-        // Get the download URL of the uploaded image
+    //Upload profile picture to storage
 
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      const user = res.user;
-      const storageRef = ref(storage, `profilePictures/${user.uid}`);
-      await uploadBytes(storageRef, profilePicture);
-      const downloadURL = await getDownloadURL(storageRef);
-      const docRef = collection(db, "users");
-      await setDoc(doc(docRef, user.uid), {
-        uid: user.uid,
-        name,
-        displayName: name.split(" ")[0],
-        bio: "Hey there! I am using Fireplace",
-        authProvider: "Local",
-        email,
-        online: false,
-        profilePhotoUrl: downloadURL,
-      });
-      
+    // Get the download URL of the uploaded image
 
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
-  };
-  
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    const storageRef = ref(storage, `profilePictures/${user.uid}`);
+    await uploadBytes(storageRef, profilePicture);
+    const downloadURL = await getDownloadURL(storageRef);
+    const docRef = collection(db, "users");
+    await setDoc(doc(docRef, user.uid), {
+      uid: user.uid,
+      name,
+      displayName: name.split(" ")[0],
+      bio: "Hey there! I am using Fireplace",
+      authProvider: "Local",
+      email,
+      online: false,
+      profilePhotoUrl: downloadURL,
+    });
 
-  // Password reset function
-  const sendPasswordReset = async (email) => {
-    try {
-      await sendPasswordResetEmail(auth, email);
-      alert("Password reset link sent!");
 
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
 
-  // Logout function
-  const logout = () => {
-    signOut(auth);
-  };
 
-  // Export all the necessary functions
-  export {
-    auth,
-    db,
-    signInWithGoogle, 
-    logInWithEmailAndPassword, 
-    registerWithEmailAndPassword, 
-    sendPasswordReset, 
-    logout, 
-    storage,
-    app,
-  };
+// Password reset function
+const sendPasswordReset = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("Password reset link sent!");
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
+
+// Logout function
+const logout = () => {
+  signOut(auth);
+};
+
+// Export all the necessary functions
+export {
+  auth,
+  db,
+  signInWithGoogle,
+  logInWithEmailAndPassword,
+  registerWithEmailAndPassword,
+  sendPasswordReset,
+  logout,
+  storage,
+  app,
+};
