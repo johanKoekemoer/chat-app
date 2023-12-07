@@ -1,6 +1,6 @@
 
 // Import the necessary react hooks, navigation functions, styling and Firebase funtions
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Chat.css";
 import { auth } from "../Firebase"
@@ -12,36 +12,39 @@ import Topbar from "./chat_sub_components/Topbar";
 
 function Chat() {
 
+  const feedRef = useRef(null);
+
   //Declare neccesary state variables
   const [user, loading] = useAuthState(auth);
+  const [selectedChat, setSelectedChat] = useState("")
 
+  const updateChat = (chat) => {
+    setSelectedChat(chat);
+  }
 
-  useEffect(() => {
-    //Insert useEffect if neccesary
-  }, [user, loading]);
 
   return (
     <div className="chat">
       <div className="topbar-container">
-      <Topbar />
+        <Topbar selectedChat={selectedChat}/>
       </div>
       <div className="main-container">
         <div className="left-container">
-          <div className="feed-container">
-            <Feed />
+          <div className="feed-container" ref={feedRef}>
+            <Feed selectedChat={selectedChat} feedRef={feedRef} />
           </div>
           <div className="input-container">
-            <Input />
+            <Input selectedChat={selectedChat} />
           </div>
         </div>
         <div className="lobby-container">
-          <Lobby />
+          <Lobby updateChat={updateChat} selectedChat={selectedChat} />
         </div>
       </div>
     </div>
   );
-  
-  
+
+
 
 }
 

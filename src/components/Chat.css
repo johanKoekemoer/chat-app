@@ -1,59 +1,63 @@
 /* Main chat container */
 .chat {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #ff8c00; /* Use a warm orange or brown background color */
-    /* Add more styles as needed */
-  }
-  
-  /* Topbar container */
-  .topbar-container {
-    background-color: #8b0000; /* A deeper red for the top bar */
-    color: #fff;
-    padding: 10px;
-    /* Add more styles as needed */
-  }
-  
-  /* Main content container with two sections */
-  .main-container {
-    display: flex;
-    flex: 1;
-  }
-  
-  /* Left container with chat feed and input */
-  .left-container {
-    flex: 2; /* Adjust the width as needed */
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Feed container */
-  .feed-container {
-    flex: 2; /* Adjust the height as needed */
-    background-color: #f4a460; /* A light brown for the chat feed */
-    /* Add more styles as needed */
-  }
-  
-  /* Input container */
-  .input-container {
-    flex: 1; /* Adjust the height as needed */
-    background-color: #fff;
-    /* Add more styles as needed */
-  }
-  
-  /* Lobby container (sidebar) */
-  .lobby-container {
-    flex: 1; /* Adjust the width as needed */
-    background-color: #cd853f; /* Use a golden brown for the lobby */
-    /* Add more styles as needed */
-  }
-  
-  /* Bottombar container */
-  .bottombar-container {
-    background-color: #8b0000; /* Match the top bar for the bottom bar */
-    color: #fff;
-    padding: 10px;
-    /* Add more styles as needed */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Prevent body from scrolling */
+  background-color: #666666;
+}
+
+/* Topbar container */
+.topbar-container {
+  background-color: #eb8500;
+  /* A deeper red for the top bar */
+  color: #fff;
+  padding: 10px;
+  /* Add more styles as needed */
+}
+
+/* Main content container with two sections */
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Left container with chat feed and input */
+.left-container {
+  background-color: #e0d2b9;
+  flex: 1;
+  /* Adjust the width as needed */
+  display: flex;
+  flex-direction: column;
+  height: 93vh; /* Subtract the fixed height of input-container */
+}
+
+/* Feed container */
+.feed-container {
+  /* Adjust the height as needed */
+  background-color: #444444;
+  /* A light brown for the chat feed */
+  /* Add more styles as needed */
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  height:calc(99vh - 95px);
+}
+
+/* Input container */
+.input-container {
+  background-color: #666666;
+
+}
+
+
+
+/* Lobby container (sidebar) */
+.lobby-container {
+  flex: 1;
+  /* Adjust the width as needed */
+  background-color: #666666;
+  /* Use a golden brown for the lobby */
+  max-width: fit-content;
+  /* Add more styles as needed */
+  overflow-y: auto;
+}

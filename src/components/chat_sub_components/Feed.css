@@ -1,0 +1,61 @@
+.feed-inner-container {
+    flex-direction: column;
+}
+
+.container-left {
+  flex-direction: column;
+  display:flex;
+  align-items: start;
+}
+
+.container-right {
+  flex-direction: column;
+  display:flex;
+  align-items: end;
+}
+
+.bubble-left,
+.bubble-right {
+  min-width: 350px;
+  color: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bubble-right {
+  background-color: #007bff;
+  align-items: start;
+}
+
+.bubble-left {
+  background-color: #554a4a;
+}
+
+/* Add styles for time-tag and message-tag containers */
+.message-container,
+.time-container {
+  display: inline-block;
+}
+
+.name-tag {
+  font-size: 15px;
+  margin: 0px;
+  margin-left: 2px;
+  margin-bottom: 3px;
+}
+
+.message-tag {
+  font-size: 18px;
+  margin: 2px;
+  margin-left: 5px;
+}
+
+/* Add styles for time-tag */
+.time-tag {
+  font-size: 12px;
+  margin: 0px;
+  margin-left: 5px;
+}
