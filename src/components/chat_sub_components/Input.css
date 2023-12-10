@@ -60,6 +60,15 @@
   padding-bottom: 3px;
 }
 
+.inner-media-container {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-top: 8px;
+  padding-bottom: 3px;
+}
+
 .img-div, .vid-div, .aud-div {
   background-color: #eb8500;
   height: 65px;
@@ -79,10 +88,20 @@
 }
 
 
-.svg-img, .svg-vid, .svg-aud {
+.media-hidden-input {
+  visibility: hidden;
+  height: 0px;
+  padding: 0px;
+  margin: 0px;
+  
 }
 
 .par-img, .par-vid, .par-aud {
   margin: 0px;
   margin-top: 6px;
+}
+
+.selected-image, .selected-video, .selected-audio {
+  width: 75px;
+  height: 75px;
 }
