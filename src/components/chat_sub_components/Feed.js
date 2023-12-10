@@ -78,7 +78,7 @@ const Feed = ({ selectedChat, feedRef }) => {
     fetchUsernames();
     if (selectedChat === "public") {
       fetchPublic();
-  } else if (selectedChat != "public" && selectedChat.length >= 1) {
+  } else if (selectedChat !== "public" && selectedChat.length >= 1) {
     fetchMessages();
   };
   }, [selectedChat]);

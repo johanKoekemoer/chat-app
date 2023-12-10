@@ -139,7 +139,7 @@ const navigate = useNavigate();
   return (
     <div className="profile">
       <div className="profile-heading">
-        <h3>{displayName}'s Profile</h3>
+        <h3 className="profile-title">Your Profile</h3>
       </div>
 
       <div className="inner-container">
@@ -148,7 +148,7 @@ const navigate = useNavigate();
           <label htmlFor="file-input">
             {editingPic ?
               null :
-              (<img className="img" src={imgUrl} alt={displayName + "'s Profile Photo"}/>)}
+              (<img className="profile-img" src={imgUrl} alt={displayName + "'s Profile Photo"}/>)}
           </label>
           {editingPic ?
            (<div className="apply-pic-div"><button onClick={submitProfilePicture}>Update Avatar<CheckIcon/></button></div>) :

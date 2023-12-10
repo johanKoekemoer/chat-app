@@ -43,13 +43,13 @@ const Topbar = ({ selectedChat }) => {
       </div >
 
     )
-  } else if (typeof (selectedChat) === "string" && selectedChat != "public") {
+  } else if (typeof (selectedChat) === "string" && selectedChat !== "public") {
     return (
 
       <div className="topbar" >
 
         <div className="chat-title-container">
-        <img className="chat-picture" src={data[selectedChat]?.picUrl} />
+        <img className="chat-picture" src={data[selectedChat]?.picUrl} alt={data[selectedChat]?.name + "'s picture"} />
           <p className="chat-name">{data[selectedChat]?.name}</p>
         </div>
 

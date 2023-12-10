@@ -26,27 +26,47 @@
 .left-container {
   background-color: #e0d2b9;
   flex: 1;
-  /* Adjust the width as needed */
   display: flex;
   flex-direction: column;
-  height: 93vh; /* Subtract the fixed height of input-container */
+  height: 100%; 
+  border: 1px solid #000000a4 ;
+}
+
+.left-container-nochat {
+  background-color: #e0d2b9;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
 }
 
 /* Feed container */
 .feed-container {
-  /* Adjust the height as needed */
   background-color: #444444;
-  /* A light brown for the chat feed */
-  /* Add more styles as needed */
   overflow-y: auto;
   scroll-behavior: smooth;
-  height:calc(99vh - 95px);
+  height: 100%;
+}
+
+/* Feed container when no chat selected */
+.feed-container-nochat {
+  background-color: #444444;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  height:100%;
 }
 
 /* Input container */
 .input-container {
   background-color: #666666;
+  border: 1px solid #0000006c ;
+  padding-right: 7px;
+}
 
+.input-container-nochat {
+  background-color: #666666;
+  visibility: hidden;
+  height: 0%;
 }
 
 
@@ -60,4 +80,5 @@
   max-width: fit-content;
   /* Add more styles as needed */
   overflow-y: auto;
+  border: 1px solid #0000006c ;
 }

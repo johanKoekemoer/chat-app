@@ -29,6 +29,19 @@
   padding-top: 2px;
 }
 
+.paperclip-container {
+  margin: 5px;
+  margin-right: 7px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #eb8500;
+  cursor: pointer; 
+}
+
+.paperclip-container:hover {
+  background-color: rgb(119, 119, 119);
+}
+
 .send-btn {
   background-color: #eb8500;
   color: #fff;
@@ -36,4 +49,40 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.media-container {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-top: 8px;
+  padding-bottom: 3px;
+}
+
+.img-div, .vid-div, .aud-div {
+  background-color: #eb8500;
+  height: 65px;
+  width: 65px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding: 10px;
+}
+
+.img-div:hover, .vid-div:hover, .aud-div:hover {
+  background-color: rgb(119, 119, 119);
+}
+
+
+.svg-img, .svg-vid, .svg-aud {
+}
+
+.par-img, .par-vid, .par-aud {
+  margin: 0px;
+  margin-top: 6px;
 }

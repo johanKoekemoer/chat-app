@@ -30,10 +30,10 @@ function Chat() {
       </div>
       <div className="main-container">
         <div className="left-container">
-          <div className="feed-container" ref={feedRef}>
+          <div className={selectedChat === "" ? "feed-container-nochat" : "feed-container"} ref={feedRef}>
             <Feed selectedChat={selectedChat} feedRef={feedRef} />
           </div>
-          <div className="input-container">
+          <div className={selectedChat === "" ? "input-container-nochat" : "input-container"}>
             <Input selectedChat={selectedChat} />
           </div>
         </div>
