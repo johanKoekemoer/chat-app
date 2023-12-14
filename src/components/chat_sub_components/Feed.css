@@ -1,16 +1,16 @@
 .feed-inner-container {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .container-left {
   flex-direction: column;
-  display:flex;
+  display: flex;
   align-items: start;
 }
 
 .container-right {
   flex-direction: column;
-  display:flex;
+  display: flex;
   align-items: end;
 }
 
@@ -34,7 +34,6 @@
   background-color: #554a4a;
 }
 
-/* Add styles for time-tag and message-tag containers */
 .message-container,
 .time-container {
   display: inline-block;
@@ -53,9 +52,13 @@
   margin-left: 5px;
 }
 
-/* Add styles for time-tag */
 .time-tag {
   font-size: 12px;
   margin: 0px;
   margin-left: 5px;
+}
+
+.feed-img {
+  max-width: 350px;
+  max-height: 350px;
 }

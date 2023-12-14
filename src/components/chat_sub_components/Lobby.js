@@ -14,7 +14,7 @@ const Lobby = ({ updateChat, selectedChat }) => {
   const fetchUserData = async () => {
     try {
       const q = query(collection(db, "users"));
-      const unsubscribe = onSnapshot(q, async(snapshot)=>{
+      const unsubscribe = onSnapshot(q, async (snapshot) => {
         const userData = snapshot.docs.map((doc) => doc.data());
         let userObj = {};
         for (let i = 0; i < userData.length; i++) {
@@ -27,7 +27,7 @@ const Lobby = ({ updateChat, selectedChat }) => {
         setData(userObj);
       });
       return unsubscribe;
-    } catch(error) {console.error("Error fetching User Data: " + error)}
+    } catch (error) { console.error("Error fetching User Data: " + error) }
   };
 
   const fetchHistory = async () => {
@@ -56,7 +56,7 @@ const Lobby = ({ updateChat, selectedChat }) => {
             });
           }
         }
-        setHistory(histData); 
+        setHistory(histData);
       });
       return unsubscribe;
     } catch (error) {
@@ -74,13 +74,12 @@ const Lobby = ({ updateChat, selectedChat }) => {
         for (let i = 0; i < userDoc.length; i++) {
           const currentUser = userDoc[i].data();
 
-          // Check if the user is online and not the current user
           if (currentUser.online && user.uid !== currentUser.uid) {
-              usersOnline.push({
-                "uid": currentUser.uid,
-                "profilePhotoUrl": currentUser.profilePhotoUrl,
-                "displayName": currentUser.displayName,
-              });
+            usersOnline.push({
+              "uid": currentUser.uid,
+              "profilePhotoUrl": currentUser.profilePhotoUrl,
+              "displayName": currentUser.displayName,
+            });
           };
         };
 
@@ -97,18 +96,16 @@ const Lobby = ({ updateChat, selectedChat }) => {
   };
 
   useEffect(() => {
-
     const fetchData = async () => {
       if (user) {
         const unsubscribeHistory = fetchHistory();
         const unsubscribeData = fetchUserData();
         const unsubscribeOnline = fetchOnline();
 
-        // Cleanup functions
         return () => {
           unsubscribeData();
           unsubscribeHistory();
-          unsubscribeOnline(); 
+          unsubscribeOnline();
         };
       }
     };
@@ -123,22 +120,22 @@ const Lobby = ({ updateChat, selectedChat }) => {
     return (
       <div className="user-list">
         {onlineUsers
-        .filter((person) => !history.some((item) => item.uid === person.uid))
-        .map((person, index) => (
-          <div
-            key={index}
-            className="user"
-            value={person.uid}
-            onClick={() => handleClick(person.uid)}
-          >
-            <img
-              className="img"
-              src={data[person.uid].picUrl}
-              alt={`${data[person.uid].name}'s Profile`}
-            />
-            <p className="name">{data[person.uid].name}</p>
-          </div>
-        ))}
+          .filter((person) => !history.some((item) => item.uid === person.uid))
+          .map((person, index) => (
+            <div
+              key={index}
+              className="user"
+              value={person.uid}
+              onClick={() => handleClick(person.uid)}
+            >
+              <img
+                className="img"
+                src={data[person.uid].picUrl}
+                alt={`${data[person.uid].name}'s Profile`}
+              />
+              <p className="name">{data[person.uid].name}</p>
+            </div>
+          ))}
       </div>
     );
   }

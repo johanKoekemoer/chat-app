@@ -21,13 +21,12 @@ function Reset() {
     if (user) navigate("/dashboard");
   }, [user, loading]);
 
-  // When reset password is clicked, sendPasswordReset function is called and the email input is cleared
+
   const handleResetPassword = () => {
     sendPasswordReset(email);
     setEmail("");
   };
 
-  // JSX structure for Reset component
   return (
     <div className="reset">
       <div className="reset__container">

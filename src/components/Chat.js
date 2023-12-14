@@ -1,5 +1,3 @@
-
-// Import the necessary react hooks, navigation functions, styling and Firebase funtions
 import React, { useEffect, useState, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Chat.css";
@@ -9,12 +7,10 @@ import Input from "./chat_sub_components/Input";
 import Lobby from "./chat_sub_components/Lobby";
 import Topbar from "./chat_sub_components/Topbar";
 
-
 function Chat() {
 
   const feedRef = useRef(null);
 
-  //Declare neccesary state variables
   const [user, loading] = useAuthState(auth);
   const [selectedChat, setSelectedChat] = useState("")
 
@@ -22,14 +18,13 @@ function Chat() {
     setSelectedChat(chat);
   }
 
-
   return (
     <div className="chat">
       <div className="topbar-container">
-        <Topbar selectedChat={selectedChat}/>
+        <Topbar selectedChat={selectedChat} />
       </div>
       <div className="main-container">
-        <div className="left-container">
+        <div className={selectedChat === "" ? "left-container-nochat" : "left-container"}>
           <div className={selectedChat === "" ? "feed-container-nochat" : "feed-container"} ref={feedRef}>
             <Feed selectedChat={selectedChat} feedRef={feedRef} />
           </div>
@@ -43,9 +38,6 @@ function Chat() {
       </div>
     </div>
   );
-
-
-
 }
 
 export default Chat;
