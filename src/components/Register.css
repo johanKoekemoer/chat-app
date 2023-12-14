@@ -1,45 +1,50 @@
 body {
-  background-color: #333333; 
+  background-color: #333333;
   color: #ffffff00;
   font-family: Arial, sans-serif;
 }
 
 .register {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .register__container {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    background-color: #dcdcdc;
-    padding: 30px;
-    border-radius: 4%;
-    color: black;
-  }
-  .register__textBox {
-    padding: 10px;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  .register__btn {
-    padding: 10px;
-    font-size: 18px;
-    margin-bottom: 10px;
-    border: none;
-    color: white;
-    background-color: black;
-  }
-  .register__google {
-    background-color: #4285f4;
-  }
-  .register div {
-    margin-top: 7px;
-  }
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .register_pictureInput {
-    margin-bottom: 20px;
-  }
+.register__container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: #dcdcdc;
+  padding: 30px;
+  border-radius: 4%;
+  color: black;
+}
+
+.register__textBox {
+  padding: 10px;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.register__btn {
+  padding: 10px;
+  font-size: 18px;
+  margin-bottom: 10px;
+  border: none;
+  color: white;
+  background-color: black;
+}
+
+.register__google {
+  background-color: #4285f4;
+}
+
+.register div {
+  margin-top: 7px;
+}
+
+.register_pictureInput {
+  margin-bottom: 20px;
+}

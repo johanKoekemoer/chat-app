@@ -17,9 +17,11 @@ const Topbar = ({ selectedChat }) => {
         let uid = userDoc[i].data().uid;
         let name = userDoc[i].data().displayName;
         let picUrl = userDoc[i].data().profilePhotoUrl;
+        let bio = userDoc[i].data().bio;
         userObject[uid] = {
-          name : name,
-          picUrl : picUrl,
+          name: name,
+          picUrl: picUrl,
+          bio: bio,
         }
       };
       setData(userObject);
@@ -34,31 +36,25 @@ const Topbar = ({ selectedChat }) => {
 
   if (selectedChat === "public") {
     return (
-
       <div className="topbar" >
         <div className="chat-title-container">
           <img className="chat-picture" src="https://firebasestorage.googleapis.com/v0/b/fireplace-7d903.appspot.com/o/Fireplace_logo.png?alt=media&token=b8ad67ed-4fee-4b44-8725-fabef8a5a9cc" alt="Firebase logo" />
           <p className="chat-name">Fireplace Chat</p>
         </div>
       </div >
-
     )
-  } else if (typeof (selectedChat) === "string" && selectedChat !== "public") {
+
+  } else if (selectedChat !== "" && selectedChat !== "public") {
     return (
-
       <div className="topbar" >
-
         <div className="chat-title-container">
-        <img className="chat-picture" src={data[selectedChat]?.picUrl} alt={data[selectedChat]?.name + "'s picture"} />
+          <img className="chat-picture" src={data[selectedChat]?.picUrl} alt={data[selectedChat]?.name + "'s picture"} />
           <p className="chat-name">{data[selectedChat]?.name}</p>
+          <p className="chat-bio">{" - \"" + data[selectedChat]?.bio + "\""}</p>
         </div>
-
-        <div className="your-profile-container">  
-          
+        <div className="your-profile-container">
         </div>
-
       </div >
-
     )
   };
 

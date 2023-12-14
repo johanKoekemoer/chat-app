@@ -8,7 +8,7 @@ import "./Register.css";
 // Register functional component
 function Register() {
 
-// Declare state variables
+  // Declare state variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ function Register() {
 
   // Declare navigate function
   const navigate = useNavigate();
-  
+
   // register function checks if all fields are valid and then calls registerWithEmailAndPassword
   const register = () => {
     if (name === "") return alert("Please enter name");

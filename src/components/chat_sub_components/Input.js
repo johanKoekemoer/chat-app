@@ -10,12 +10,12 @@ const Input = ({ selectedChat }) => {
   const [text, setText] = useState("");
   const [mediaToggle, setMediaToggle] = useState(false);
   const [mediaType, setMediaType] = useState("");
+  const [uploading, setUploading] = useState(false)
   const [img, setImg] = useState(null);
   const [vid, setVid] = useState(null);
   const [aud, setAud] = useState(null);
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+  const mediaCheck = () => {
     if (mediaType !== "") {
       if (mediaType === "img" && (img === null || img === undefined)) {
         setMediaType("");
@@ -27,33 +27,52 @@ const Input = ({ selectedChat }) => {
         setMediaType("");
       };
     };
-    handleSubmit();
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    mediaCheck();
+    setUploading(true);
+    await handleSubmit();
     setText("");
     setMediaToggle(false);
     setMediaType("");
   };
 
+  const handleKey = async (e) => {
+    if (e.key === "Enter") {
+      mediaCheck();
+      setUploading(true);
+      await handleSubmit();
+      setText("");
+      setMediaToggle(false);
+      setMediaType("");
+    }
+  };
+
   const handleSubmit = async () => {
-    if (text.trim() !== "" && selectedChat !== "") {
+    if ((text.trim() !== "" || img || vid || aud) && selectedChat !== "") {
+
+      if (mediaType === "img") {
+        const imgID = user.uid + Math.random().toString(36).slice(0, 5);
+        const storageRef = ref(storage, `images/${imgID}`);
+        await uploadBytes(storageRef, img);
+        var imgUrl = await getDownloadURL(ref(storage, `images/${imgID}`)); //var keyword used for accessibility outside of statement
+      };
+      if (mediaType === "vid") {
+        const vidID = user.uid + Math.random().toString(36).slice(0, 5);
+        const storageRef = ref(storage, `videos/${vidID}`);
+        await uploadBytes(storageRef, vid);
+        var vidUrl = await getDownloadURL(ref(storage, `videos/${vidID}`)); //""
+      };
+      if (mediaType === "aud") {
+        const audID = user.uid + Math.random().toString(36).slice(0, 5);
+        const storageRef = ref(storage, `audio/${audID}`);
+        await uploadBytes(storageRef, aud);
+        var audUrl = await getDownloadURL(ref(storage, `audio/${audID}`)); //""
+      };
+
       if (selectedChat === "public") {
-        if (mediaType === "img") {
-          const imgID = user.uid + Math.random().toString(36).slice(0, 5);
-          const storageRef = ref(storage, `images/${imgID}`);
-          await uploadBytes(storageRef, img);
-          var imgUrl = await getDownloadURL(ref(storage, `images/${imgID}`)); //var keyword used for accessibility outside of statement
-        };
-        if (mediaType === "vid") {
-          const vidID = user.uid + Math.random().toString(36).slice(0, 5);
-          const storageRef = ref(storage, `videos/${vidID}`);
-          await uploadBytes(storageRef, vid);
-          var vidUrl = await getDownloadURL(ref(storage, `videos/${vidID}`)); //var keyword used for accessibility outside of statement
-        };
-        if (mediaType === "aud") {
-          const audID = user.uid + Math.random().toString(36).slice(0, 5);
-          const storageRef = ref(storage, `audio/${audID}`);
-          await uploadBytes(storageRef, aud);
-          var audUrl = await getDownloadURL(ref(storage, `audio/${audID}`)); //var keyword used for accessibility outside of statement
-        };
         await addDoc(collection(db, "publicChat"), {
           text,
           idSender: user.uid,
@@ -73,8 +92,12 @@ const Input = ({ selectedChat }) => {
           mid: messageID,
           isMedia: mediaType === "" ? false : true,
           timeSent: new Date(),
+          imgUrl: mediaType === "img" ? imgUrl : null,
+          vidUrl: mediaType === "vid" ? vidUrl : null,
+          audUrl: mediaType === "aud" ? audUrl : null,
         });
       }
+      setUploading(false);
     }
   };
 
@@ -91,6 +114,12 @@ const Input = ({ selectedChat }) => {
   const submitMedia = (event) => {
     if (mediaType !== "") {
       const file = event.target.files[0];
+
+      const maxSize = 30 * 1024 * 1024; // 30MB max file size
+      if (file.size > maxSize) {
+        alert("File size exceeds the limit of 30MB")
+        return; //Return to cancel function
+      };
       if (mediaType === "img") {
         setImg(file);
         setVid(null);
@@ -115,12 +144,6 @@ const Input = ({ selectedChat }) => {
     setAud(null);
   };
 
-  const handleKey = (e) => {
-    if (e.key === "Enter") {
-      handleSubmit();
-    }
-  };
-
   useEffect(() => {
     setText("");
     setMediaToggle("false")
@@ -138,14 +161,14 @@ const Input = ({ selectedChat }) => {
 
   const VidSvg = () => {
     return (<svg className="svg-vid" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z" />
-      </svg>)
+      <path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z" />
+    </svg>)
   };
 
   const AudSvg = () => {
     return (<svg className="svg-aud" xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M8 3a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8a6 6 0 1 1 12 0v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1V8a5 5 0 0 0-5-5" />
-      </svg>)
+      <path d="M8 3a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8a6 6 0 1 1 12 0v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1V8a5 5 0 0 0-5-5" />
+    </svg>)
   };
 
   const PaperclipSvg = () => {
@@ -156,69 +179,73 @@ const Input = ({ selectedChat }) => {
 
   return (
     <form onSubmit={onSubmit}>
+      {uploading && <div className="loading-indicator">Uploading your message, please wait...</div>}
       {mediaToggle === true ? <div className="media-container">
-        {mediaType !== "" ? 
-        <input className="media-hidden-input" type="file" id="file-input" accept={mediaType === "img" ?
-         "image/*" :
-          mediaType === "vid" ?
-          "video/*" :
-           "audio/*"} onChange={submitMedia} /> : null}
+        {mediaType !== "" ?
+          <input className="media-hidden-input" type="file" id="file-input" accept={mediaType === "img" ?
+            "image/*" :
+            mediaType === "vid" ?
+              "video/*" :
+              "audio/*"} onChange={submitMedia} /> : null}
         {(img !== null || vid !== null || aud !== null) ? (
           <div className="selected-media">
-          {mediaType === "img" && img !== null ? (
-            <>
-              <img src={URL.createObjectURL(img)} alt="Selected Image" className="selected-image" />
-              <p className="file-name">{img.name}</p>
-            </>
-          ) : mediaType === "vid" && vid !== null ? (
-            <>
-              <video src={URL.createObjectURL(vid)} alt="Selected Video" className="selected-video" controls style={{ width: '100%' }} />
-              <p className="file-name">{vid.name}</p>
-            </>
-          ) : mediaType === "aud" && aud !== null ? (
-            <>
-              <audio src={URL.createObjectURL(aud)} alt="Selected Audio" className="selected-audio" controls style={{ width: '100%' }} />
-              <p className="file-name">{aud.name}</p>
-            </>
-          ) : null}
-        </div>
-        
+
+            {mediaType === "img" && img !== null ? (
+              <>
+                <img src={URL.createObjectURL(img)} alt="Selected Image" className="selected-image" />
+                <p className="file-name">{img.name}</p>
+              </>
+            ) : mediaType === "vid" && vid !== null ? (
+              <>
+                <video src={URL.createObjectURL(vid)} alt="Selected Video" className="selected-video" controls style={{ width: '100%' }} />
+                <p className="file-name">{vid.name}</p>
+              </>
+            ) : mediaType === "aud" && aud !== null ? (
+              <>
+                <audio src={URL.createObjectURL(aud)} alt="Selected Audio" className="selected-audio" controls style={{ width: '100%' }} />
+                <p className="file-name">{aud.name}</p>
+              </>
+            ) : null}
+          </div>
+
         ) : null}
         <label htmlFor="file-input">
-          {mediaType === "" ? 
-          <div className="inner-media-container">
-            <div className="img-div" onClick={pickImage}>
-              <ImgSvg />
-              <p className="par-img">Image</p>
-            </div>
-            <div className="vid-div" onClick={pickVideo}>
-              <VidSvg />
-              <p className="par-vid">Video</p>
-            </div>
-            <div className="aud-div" onClick={pickAudio}>
-              <AudSvg />
-              <p className="par-aud">Audio</p>
-            </div></div> : null}
+          {mediaType === "" ?
+            <div className="inner-media-container">
+              <div className="img-div" onClick={pickImage}>
+                <ImgSvg />
+                <p className="par-img">Image</p>
+              </div>
+              <div className="vid-div" onClick={pickVideo}>
+                <VidSvg />
+                <p className="par-vid">Video</p>
+              </div>
+              <div className="aud-div" onClick={pickAudio}>
+                <AudSvg />
+                <p className="par-aud">Audio</p>
+              </div></div> : null}
         </label>
       </div> : null}
-      <div className="input__container">
-        <textarea
-          className="input_box"
-          type="text"
-          placeholder="Message"
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          onKeyDown={handleKey}
-        />
-        <div className="paperclip-container" onClick={toggleMedia} >
-        <PaperclipSvg />
-        </div>
-        <div className="btn-container">
-          <button className="send-btn" type="submit">
-            Send
-          </button>
-        </div>
-      </div>
+      {uploading ? null :
+        (<div className="input__container">
+          <textarea
+            className="input_box"
+            type="text"
+            placeholder="Message"
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            onKeyDown={handleKey}
+          />
+          <div className="paperclip-container" onClick={toggleMedia} >
+            <PaperclipSvg />
+          </div>
+          <div className="btn-container">
+            <button className="send-btn" type="submit">
+              Send
+            </button>
+          </div>
+        </div>)}
+
     </form>
   );
 };

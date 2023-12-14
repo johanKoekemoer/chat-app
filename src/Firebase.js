@@ -1,4 +1,3 @@
-// Import required functions from the Firebase modules
 import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
@@ -11,7 +10,6 @@ import {
 } from "firebase/auth";
 import { getFirestore, getDoc, collection, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -46,7 +44,6 @@ const signInWithGoogle = async () => {
 
       // If the user is new, add their information to the Firestore database
       if (!userDocSnapshot.exists()) {
-
         const newUser = {
           uid: user.uid,
           name: user.displayName,
@@ -61,7 +58,6 @@ const signInWithGoogle = async () => {
         await setDoc(doc(docRef, user.uid), newUser);
       }
     };
-
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -72,7 +68,6 @@ const signInWithGoogle = async () => {
 const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -82,13 +77,7 @@ const logInWithEmailAndPassword = async (email, password) => {
 // Email and password Authentication: Register
 const registerWithEmailAndPassword = async (name, email, password, profilePicture) => {
   try {
-
     // If user provides profile picture then the picture will be uploaded to Firebase storage
-
-    //Upload profile picture to storage
-
-    // Get the download URL of the uploaded image
-
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
     const storageRef = ref(storage, `profilePictures/${user.uid}`);
@@ -105,21 +94,17 @@ const registerWithEmailAndPassword = async (name, email, password, profilePictur
       online: false,
       profilePhotoUrl: downloadURL,
     });
-
-
   } catch (err) {
     console.error(err);
     alert(err.message);
   }
 };
 
-
 // Password reset function
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
     alert("Password reset link sent!");
-
   } catch (err) {
     console.error(err);
     alert(err.message);

@@ -6,16 +6,13 @@ import "./Feed.css";
 
 const Feed = ({ selectedChat, feedRef }) => {
 
-  // Declare State variables:
   const [user] = useAuthState(auth);
   const [usernames, setUsernames] = useState({});
   const [messages, setMessages] = useState([]);
   const [publicChat, setPublicChat] = useState([]);
 
-
-
   const fetchUsernames = async () => {
-  // Change to run on new user
+    // Change to run on new user
     const q = query(collection(db, "users"));
     try {
       const snapshot = await getDocs(q);
@@ -32,8 +29,6 @@ const Feed = ({ selectedChat, feedRef }) => {
     };
   };
 
-  //fetchUsernames()
-
   const fetchPublic = () => {
     if (user) {
       const q = query(collection(db, "publicChat"), orderBy("timeSent"));
@@ -46,8 +41,6 @@ const Feed = ({ selectedChat, feedRef }) => {
       return unsubscribe;
     }
   };
-
-
 
   const fetchMessages = async () => {
     if (user) {
@@ -78,13 +71,13 @@ const Feed = ({ selectedChat, feedRef }) => {
     fetchUsernames();
     if (selectedChat === "public") {
       fetchPublic();
-  } else if (selectedChat !== "public" && selectedChat.length >= 1) {
-    fetchMessages();
-  };
+    } else if (selectedChat !== "public" && selectedChat.length >= 1) {
+      fetchMessages();
+    };
   }, [selectedChat]);
 
   useEffect(() => {
-scrollDown();
+    scrollDown();
   }, [messages, publicChat]);
 
   function PublicDisplay() {
@@ -93,7 +86,30 @@ scrollDown();
         {publicChat.map((msg, index) => (
           <div key={index} className={msg.idSender === user.uid ? 'container-right' : 'container-left'}>
             <div className={msg.idSender === user.uid ? 'bubble-right' : 'bubble-left'}>
-
+              {msg.imgUrl ?
+                <img
+                  className="feed-img"
+                  src={msg.imgUrl}
+                  alt="image"
+                /> :
+                msg.vidUrl ?
+                  <video
+                    className="feed-video"
+                    src={msg.vidUrl}
+                    alt="video"
+                    controls
+                    style={{ width: '100%' }}
+                    height="300"
+                  /> :
+                  msg.audUrl &&
+                  <audio
+                    className="feed-audio"
+                    src={msg.audUrl}
+                    alt="audio"
+                    controls
+                    style={{ width: '100%' }}
+                  />
+              }
               {msg.idSender !== user.uid ? <div className="name-container"><p className="name-tag">{usernames[msg.idSender]}</p></div> : null}
               <div className="message-container">
                 <p className="message-tag">{msg.text}</p>
@@ -114,6 +130,30 @@ scrollDown();
         {messages.map((msg, index) => (
           <div key={index} className={msg.idSender === user.uid ? 'container-right' : 'container-left'}>
             <div className={msg.idSender === user.uid ? 'bubble-right' : 'bubble-left'}>
+              {msg.imgUrl ?
+                <img
+                  className="feed-img"
+                  src={msg.imgUrl}
+                  alt="image"
+                /> :
+                msg.vidUrl ?
+                  <video
+                    className="feed-video"
+                    src={msg.vidUrl}
+                    alt="video"
+                    controls
+                    style={{ width: '100%' }}
+                    height="300"
+                  /> :
+                  msg.audUrl &&
+                  <audio
+                    className="feed-audio"
+                    src={msg.audUrl}
+                    alt="audio"
+                    controls
+                    style={{ width: '100%' }}
+                  />
+              }
               <div className="message-container">
                 <p className="message-tag">{msg.text}</p>
               </div>
@@ -126,9 +166,6 @@ scrollDown();
       </div>
     );
   };
-
-
-
 
   if (selectedChat === "public") {
     return (
@@ -148,7 +185,5 @@ scrollDown();
     </div>
 
   )
-
 };
-
 export default Feed;

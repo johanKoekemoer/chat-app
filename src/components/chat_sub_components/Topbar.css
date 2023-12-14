@@ -10,9 +10,18 @@
     align-items: center;
 }
 
-.chat-name, .chat-picture  {
-margin-top: -8px;
-margin-bottom: -8px;
-margin-left: 5px;
-margin-right: 5px;
+.chat-name,
+.chat-picture {
+    margin-top: -8px;
+    margin-bottom: -8px;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-weight: 600;
+}
+
+.chat-bio {
+font-size: small;
+font-weight: 550;
+font-style: italic;
+color: rgb(255, 255, 255);
 }
