@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../Firebase";
 import "./Lobby.css";
-import { collection, query, where, onSnapshot } from "@firebase/firestore";
+import { collection, query, where, onSnapshot, or } from "@firebase/firestore";
 
 const Lobby = ({ updateChat, selectedChat }) => {
 
@@ -32,11 +32,10 @@ const Lobby = ({ updateChat, selectedChat }) => {
 
   const fetchHistory = async () => {
     try {
-      const q = query(
-        collection(db, "messages"),
-        where("mid", ">=", user.uid),
-        where("mid", "<=", user.uid + '\uf8ff')
-      );
+      const docref = collection(db, "messages");
+      const q = query(docref, or(
+        where("idSender", "==", user.uid),
+        where("idReciever", "==", user.uid)));
 
       const unsubscribe = onSnapshot(q, async (snapshot) => {
 
