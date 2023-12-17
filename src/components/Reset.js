@@ -40,7 +40,7 @@ function Reset() {
         <button className="reset__btn" onClick={handleResetPassword}>
           Send password reset email
         </button>
-        <div>
+        <div className="text">
           Don't have an account? <Link to="/register">Register</Link> now.
         </div>
       </div>

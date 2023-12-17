@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, logInWithEmailAndPassword, signInWithGoogle } from '../Firebase'
+import { auth, logInWithEmailAndPassword, signInWithGoogle, db } from '../Firebase'
 import { useAuthState } from "react-firebase-hooks/auth";
+import { doc, updateDoc } from "firebase/firestore";
 import "./Login.css";
 
 const Login = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) navigate("/dashboard");
-  }, [user, loading]);
+  const handleOnline = async() => {
+    const userDocRef = doc(db, "users", user.uid);
+    await updateDoc(userDocRef, { online: true });
+    navigate('/chat');
+  };
 
+  useEffect(() => {
+    if (user) {
+      handleOnline();
+    };
+  }, [user, loading]);
+  
   return (
     <div className="login">
       <img src="https://firebasestorage.googleapis.com/v0/b/fireplace-7d903.appspot.com/o/login_logo.png?alt=media&token=a04e805c-e36a-4e3b-9759-87a66ef2d8fc" alt="Your Logo" className="login__logo" />
@@ -43,10 +53,10 @@ const Login = () => {
           Login with Google
         </button>
         <div>
-          <Link to="/reset">Forgot Password</Link>
+          <p className="text"><Link to="/reset">Forgot Password</Link></p>
         </div>
         <div>
-          Don't have an account? <Link to="/register">Register</Link> now.
+          <p className="text">Don't have an account? <Link to="/register">Register</Link> now.</p>
         </div>
       </div>
     </div>

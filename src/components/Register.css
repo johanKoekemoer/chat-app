@@ -46,5 +46,28 @@ body {
 }
 
 .register_pictureInput {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+}
+
+.register-img {
+  height: 20vh;
+  width: 20vh;
+}
+.register-img:hover {
+  cursor: pointer;
+  height: 19vh;
+  width: 19vh;
+  border: 0.5vh solid rgb(43, 99, 255);
+}
+
+.register-pic-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 2vh;
+}
+
+.register-hidden-input {
+  visibility: hidden;
 }

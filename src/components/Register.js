@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, registerWithEmailAndPassword, signInWithGoogle } from "../Firebase";
+import { auth, registerWithEmailAndPassword, signInWithGoogle, db } from "../Firebase";
+import { doc, updateDoc } from "@firebase/firestore";
 import "./Register.css";
 
 // Register functional component
@@ -23,6 +24,8 @@ function Register() {
   // register function checks if all fields are valid and then calls registerWithEmailAndPassword
   const register = () => {
     if (name === "") return alert("Please enter name");
+    if (password.length < 6) return alert("Password should contain atleast 6 characters")
+    if (profilePicture === null) return alert("Please set a profile picture")
     // Email and password checks are validated by Firebase itself and will prompt alert message if necessary
     registerWithEmailAndPassword(name, email, password, profilePicture);
   };
@@ -33,11 +36,13 @@ function Register() {
     setProfilePicture(file);
   };
 
-  // If somehow user navigates to `/register` while being logged in then user is navigated to `/dashboard`
+  // Once login is detected user is navigated to chat page
   useEffect(() => {
     if (loading) return;
-    if (user) navigate("/dashboard");
-  }, [user, loading, navigate]);
+    if (user) {
+      navigate('/chat');
+    };
+  }, [user, loading]);
 
   // JSX structure for Register page
   return (
@@ -57,13 +62,20 @@ function Register() {
           onChange={(event) => setEmail(event.target.value)}
           placeholder="E-mail Address"
         />
-        Set Profile Picture <input
+        <p className="text">{profilePicture === null ? "Set Profile Picture" : null}</p>
+        <div className="register-pic-container">
+        <input
           type="file"
-          className="register_pictureInput"
+          className={profilePicture === null ? "register_pictureInput" : "register-hidden-input"}
           id="profilePictureInput"
           accept="image/*"
           onChange={profilePictureChange}
         />
+        { profilePicture === null ?
+        null : 
+        <label htmlFor="profilePictureInput"><img className="register-img"
+        src={URL.createObjectURL(profilePicture)} /></label>}
+        </div>
         <input
           type="password"
           className="register__textBox"
@@ -80,7 +92,7 @@ function Register() {
         >
           Register with Google
         </button>
-        <div>
+        <div className="text">
           Already have an account? <Link to="/">Login</Link> now.
         </div>
       </div>

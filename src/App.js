@@ -1,62 +1,62 @@
 // Import routing elements and components
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Reset from "./components/Reset";
-import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Chat from "./components/Chat";
-import { auth, db } from "./Firebase";
+import { auth, db, logout } from "./Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { updateDoc, doc, getDoc } from "@firebase/firestore";
+import { updateDoc, doc, collection, onSnapshot } from "@firebase/firestore";
 
-// Main App Component
 function App() {
-  // ONLINE/OFFLINE Detection functionality
-  const [user, loading] = useAuthState(auth);
-  const [userId, setUserId] = useState("")
 
-  const setUserOnline = async (id) => {
-    if (id) {
-      const userDocRef = doc(db, "users", id);
-      await updateDoc(userDocRef, { online: true });
-    }
+  const [user] = useAuthState(auth);
+  const [userData, setUserData] = useState({});
+
+  const fetchUserData = () => {
+    const q = collection(db, "users");
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const userObject = {};
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const uid = data.uid;
+        userObject[uid] = {
+          uid: data.uid,
+          name: data.name,
+          displayName: data.displayName,
+          bio: data.bio,
+          profilePhotoUrl: data.profilePhotoUrl,
+          online: data.online,
+          email: data.email,
+        };
+      });
+      setUserData(userObject);
+    });
+    return unsubscribe;
   };
 
-  const setUserOffline = async (id) => {
-    if (id) {
-      const userDocRef = doc(db, "users", id);
-      await updateDoc(userDocRef, { online: false });
-      setUserId("");
-    }
-  };
 
   useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      e.preventDefault(); // Prevent the default dialog from showing
-      setUserOffline(user?.uid); // Update the user's online status to "false" when leaving
-    };
+    const unsubscribe = fetchUserData();
+    return () => unsubscribe();
+  }, []);
 
-    // Attach the beforeunload event listener
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    onAuthStateChanged(auth, (user) => {
+  // UseEffect for if user leaves without logging out:
+  useEffect(() => {
+    const handleUnload = async () => {
       if (user) {
-        setUserId(user.uid);
-        setUserOnline(userId); // Pass the user's UID when setting online
-      } else {
-        // User is logged out, update online status to "false"
-        setUserOffline(userId); // Pass the user's UID when setting offline
+        const userDocRef = doc(db, "users", user.uid);
+        await updateDoc(userDocRef, { online: false });
+        await logout();
       }
-    });
-
-    return () => {
-      // Remove the beforeunload event listener when the component unmounts
-      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [user, loading]);
+    window.addEventListener('beforeunload', handleUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+  }, [user]);
 
   return (
     <div className="app">
@@ -65,9 +65,8 @@ function App() {
           <Route exact path="/" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/reset" element={<Reset />} />
-          <Route exact path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/chat" element={<Chat />} />
+          <Route exact path="/profile" element={<Profile userData = {userData} />} />
+          <Route exact path="/chat" element={<Chat userData = {userData} fetchUserData = {fetchUserData} />} />
         </Routes>
       </Router>
     </div>

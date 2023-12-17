@@ -4,30 +4,11 @@ import { collection, getDocs, onSnapshot, orderBy, query, where, and, or } from 
 import { auth, db } from "../../Firebase";
 import "./Feed.css";
 
-const Feed = ({ selectedChat, feedRef }) => {
+const Feed = ({ selectedChat, feedRef, userData }) => {
 
   const [user] = useAuthState(auth);
-  const [usernames, setUsernames] = useState({});
   const [messages, setMessages] = useState([]);
   const [publicChat, setPublicChat] = useState([]);
-
-  const fetchUsernames = async () => {
-    // Change to run on new user
-    const q = query(collection(db, "users"));
-    try {
-      const snapshot = await getDocs(q);
-      const userDoc = snapshot.docs;
-      const userObject = {};
-      for (let i = 0; i < userDoc.length; i++) {
-        let uid = userDoc[i].data().uid;
-        let name = userDoc[i].data().name;
-        userObject[uid] = name
-      };
-      setUsernames(userObject);
-    } catch (error) {
-      console.error("Error fetching usernames: ", error);
-    };
-  };
 
   const fetchPublic = () => {
     if (user) {
@@ -68,7 +49,6 @@ const Feed = ({ selectedChat, feedRef }) => {
   };
 
   useEffect(() => {
-    fetchUsernames();
     if (selectedChat === "public") {
       fetchPublic();
     } else if (selectedChat !== "public" && selectedChat.length >= 1) {
@@ -110,7 +90,7 @@ const Feed = ({ selectedChat, feedRef }) => {
                     style={{ width: '100%' }}
                   />
               }
-              {msg.idSender !== user.uid ? <div className="name-container"><p className="name-tag">{usernames[msg.idSender]}</p></div> : null}
+              {msg.idSender !== user.uid ? <div className="name-container"><p className="name-tag">{userData[msg.idSender].displayName}</p></div> : null}
               <div className="message-container">
                 <p className="message-tag">{msg.text}</p>
               </div>

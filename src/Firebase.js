@@ -60,7 +60,7 @@ const signInWithGoogle = async () => {
     };
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    alert("Google login error, please confirm that your Google credentials are correct. See console for additional error information.");
   }
 };
 
@@ -70,7 +70,7 @@ const logInWithEmailAndPassword = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    alert("Login error, please check email and password. If the problem persists, see console for additional error information.");
   }
 };
 
@@ -83,20 +83,21 @@ const registerWithEmailAndPassword = async (name, email, password, profilePictur
     const storageRef = ref(storage, `profilePictures/${user.uid}`);
     await uploadBytes(storageRef, profilePicture);
     const downloadURL = await getDownloadURL(storageRef);
+    const newUser = {
+          uid: user.uid,
+          name,
+          displayName: name.split(" ")[0],
+          bio: "Hey there! I am using Fireplace.",
+          authProvider: "Local",
+          email,
+          profilePhotoUrl: downloadURL,
+          online: true,
+    };
     const docRef = collection(db, "users");
-    await setDoc(doc(docRef, user.uid), {
-      uid: user.uid,
-      name,
-      displayName: name.split(" ")[0],
-      bio: "Hey there! I am using Fireplace",
-      authProvider: "Local",
-      email,
-      online: false,
-      profilePhotoUrl: downloadURL,
-    });
+    await setDoc(doc(docRef, user.uid), newUser);
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    alert("Error with non-Google registration: " + err);
   }
 };
 
@@ -112,8 +113,8 @@ const sendPasswordReset = async (email) => {
 };
 
 // Logout function
-const logout = () => {
-  signOut(auth);
+const logout = async () => {
+  await signOut(auth);
 };
 
 // Export all the necessary functions
