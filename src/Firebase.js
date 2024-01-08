@@ -13,13 +13,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  authDomain: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  projectId: "xxxxxxxxxxxxxxx",
-  storageBucket: "xxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  messagingSenderId: "xxxxxxxxxxxx",
-  appId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  measurementId: "XXXXXXXXXXXX"
+  //CONFIG INFORMATION REMOVED FOR SECURTIY REASONS
+  //PLEASE INSERT YOUR OWN FIREBASE CONFIG INFORMATION
 };
 
 // Initialize the Firebase application, authentication, database and storage

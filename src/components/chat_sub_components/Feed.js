@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, getDocs, onSnapshot, orderBy, query, where, and, or } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, where, and, or } from "firebase/firestore";
 import { auth, db } from "../../Firebase";
 import "./Feed.css";
 
@@ -49,16 +49,15 @@ const Feed = ({ selectedChat, feedRef, userData }) => {
   };
 
   useEffect(() => {
-    if (selectedChat === "public") {
-      fetchPublic();
-    } else if (selectedChat !== "public" && selectedChat.length >= 1) {
-      fetchMessages();
-    };
-  }, [selectedChat]);
-
-  useEffect(() => {
     scrollDown();
-  }, [messages, publicChat]);
+  }, [publicChat, messages])
+
+  useEffect (() => {
+    scrollDown();
+    if (selectedChat !== "public" && selectedChat !== "") {
+      fetchMessages();
+    } else if (selectedChat === "public") fetchPublic();
+  }, [selectedChat]);
 
   function PublicDisplay() {
     return (
@@ -156,7 +155,8 @@ const Feed = ({ selectedChat, feedRef, userData }) => {
   } else if (selectedChat === "") {
     return (
       <div>
-        <p>...No Chat Selected...</p>
+        <h3>Welcome to Fireplace Messenger</h3>
+        <h4>Please select a Chat from the Lobby on the right</h4>
       </div>
     )
   } else return (

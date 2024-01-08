@@ -44,12 +44,14 @@ color: rgb(255, 255, 255);
     height: 10vh;
     border-radius: 7.5px;
     padding-inline: 0.5vh;
+    padding-right: 0.75vh;
 }
 .your-profile-container:hover {
     height: 9.5vh;
     background-color: #666666;
     border: 0.25vh solid black;
     cursor: pointer;
+    padding-inline: 0.5vh;
 }
 
 .logout-container {

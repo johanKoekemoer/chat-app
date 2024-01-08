@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Chat.css";
 import { auth } from "../Firebase"
+import { useNavigate } from "react-router-dom";
 import Feed from "./chat_sub_components/Feed";
 import Input from "./chat_sub_components/Input";
 import Lobby from "./chat_sub_components/Lobby";
@@ -13,6 +14,12 @@ function Chat({ userData, fetchUserData }) {
 
   const [user, loading] = useAuthState(auth);
   const [selectedChat, setSelectedChat] = useState("")
+
+  const navigate = useNavigate();
+
+  if (!user && !loading) {
+    navigate('/');
+  };
 
   const updateChat = (chat) => {
     setSelectedChat(chat);

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import { auth, db, logout, storage } from "../Firebase"
 import { query, collection, where, getDocs, updateDoc, doc, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -108,9 +108,11 @@ function Profile() {
     uploadBio();
   };
 
-  const logOut = () => {
-    logout();
-    navigate("/")
+  const handleLogout = async () => {
+    const userDocRef = doc(db, "users", user.uid);
+    await updateDoc(userDocRef, { online: false });
+    await logout();
+    navigate('/');
   };
 
   const chatPage = () => {
@@ -175,7 +177,7 @@ function Profile() {
           <button className="chatpage__btn" onClick={chatPage}>
             Continue to Chat
           </button>
-          <button onClick={logOut}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </div>
       </div>
     </div>

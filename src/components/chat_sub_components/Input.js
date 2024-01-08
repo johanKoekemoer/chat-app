@@ -81,6 +81,7 @@ const Input = ({ selectedChat }) => {
           imgUrl: mediaType === "img" ? imgUrl : null,
           vidUrl: mediaType === "vid" ? vidUrl : null,
           audUrl: mediaType === "aud" ? audUrl : null,
+          
         });
       } else if (typeof selectedChat === "string") {
         const messageID = user.uid + selectedChat + Math.random().toString(36).slice(0, 5);
@@ -95,6 +96,7 @@ const Input = ({ selectedChat }) => {
           imgUrl: mediaType === "img" ? imgUrl : null,
           vidUrl: mediaType === "vid" ? vidUrl : null,
           audUrl: mediaType === "aud" ? audUrl : null,
+          isRead : false,
         });
       }
       setUploading(false);
