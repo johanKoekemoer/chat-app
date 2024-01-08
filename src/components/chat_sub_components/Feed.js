@@ -4,10 +4,9 @@ import { collection, onSnapshot, orderBy, query, where, and, or } from "firebase
 import { auth, db } from "../../Firebase";
 import "./Feed.css";
 
-const Feed = ({ selectedChat, feedRef, userData }) => {
+const Feed = ({ selectedChat, feedRef, userData, messages }) => {
 
   const [user] = useAuthState(auth);
-  const [messages, setMessages] = useState([]);
   const [publicChat, setPublicChat] = useState([]);
 
   const fetchPublic = () => {
@@ -23,25 +22,6 @@ const Feed = ({ selectedChat, feedRef, userData }) => {
     }
   };
 
-  const fetchMessages = async () => {
-    if (user) {
-      const docref = collection(db, "messages");
-      const q = query(docref, or(
-        and(where("idSender", "==", user.uid), where("idReciever", "==", selectedChat)),
-        and(where("idSender", "==", selectedChat), where("idReciever", "==", user.uid))));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const messageArray = snapshot.docs.map((doc) => doc.data());
-        const sortedMsgs = messageArray.sort((a, b) => a.timeSent - b.timeSent)
-        setMessages(sortedMsgs);
-
-      }, (error) => {
-        console.error("Error fetching messages: ", error);
-      });
-
-      return unsubscribe;
-    }
-  };
-
   const scrollDown = () => {
     if (feedRef.current) {
       feedRef.current.scrollTop = feedRef.current.scrollHeight;
@@ -52,11 +32,12 @@ const Feed = ({ selectedChat, feedRef, userData }) => {
     scrollDown();
   }, [publicChat, messages])
 
-  useEffect (() => {
-    scrollDown();
-    if (selectedChat !== "public" && selectedChat !== "") {
-      fetchMessages();
-    } else if (selectedChat === "public") fetchPublic();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedChat === "public") fetchPublic();
+      scrollDown();
+    };
+    fetchData();
   }, [selectedChat]);
 
   function PublicDisplay() {
@@ -106,7 +87,8 @@ const Feed = ({ selectedChat, feedRef, userData }) => {
   function PrivateDisplay() {
     return (
       <div className="feed-inner-container">
-        {messages.map((msg, index) => (
+        {messages.filter((msg) => ((msg.idSender === selectedChat)||(msg.idReciever === selectedChat)))
+        .map((msg, index) => (
           <div key={index} className={msg.idSender === user.uid ? 'container-right' : 'container-left'}>
             <div className={msg.idSender === user.uid ? 'bubble-right' : 'bubble-left'}>
               {msg.imgUrl ?

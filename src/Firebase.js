@@ -13,8 +13,9 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  //CONFIG INFORMATION REMOVED FOR SECURTIY REASONS
-  //PLEASE INSERT YOUR OWN FIREBASE CONFIG INFORMATION
+  //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  //REPLACE WITH YOUR FIREBASE CONFIGURATION
+  //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 };
 
 // Initialize the Firebase application, authentication, database and storage
